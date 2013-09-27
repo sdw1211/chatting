@@ -1,1 +1,1 @@
-# NodeJS Study Team 채팅 프로그램
+# NodeJS Study Team Chatting Program
