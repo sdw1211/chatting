@@ -1,0 +1,11 @@
+{
+  "name": "chatting",
+  "version": "0.01",
+  "description": "간단한 채팅 프로그램",
+  "main": "chat.js",
+  "dependencies": {
+     "socket.io": "~0.9.16"
+  },
+  "author": "javarouka@gmail.com",
+  "license": "MIT"
+}
