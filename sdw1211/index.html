@@ -1,0 +1,78 @@
+<!DOCTYPE html> 
+<html>
+	<head>
+		<meta charsert="UTF-8">
+		<title>Chatting Server</title>
+	</head>
+	<body>
+		<label for="name">이름을 입력하세요.</label><input type="text" id="name" name="name" /><button id="join" name="join">Join</button><br/>
+		<label for="name">메세지을 입력하세요.</label><input type="text" id="message" name="message" /><button id="inputMessage" name="inputMessage">Input Message</button>
+		<div id="message">
+		</div>
+		<div id="names">
+		</div>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="//localhost:3000/socket.io/socket.io.js"></script>
+	<script>
+		$(function() {
+			var socket = io.connect("http://localhost:3000");
+
+			socket.on("joinok", function(name) {
+				$("div#message").append(name, "이 입장했습니다.<br />");
+			});
+
+			socket.on("message", function(message) {
+				$("div#message").append(message + "<br/>");
+
+			});
+
+			socket.on("names", function(names) {
+				var html = [];
+
+				for(var i=0; i <= names.length; i++) {
+					if (names[i]) {
+						html.push(names[i], "<br/>");
+					}
+				}
+
+				$("div#names").html(html.join(""));
+			});
+
+			socket.on("disconnect", function() {
+				$("div#message").append(name, "이 퇴장했습니다.<br />");
+			});
+
+			$("button#join").on({
+				click : function(e) {
+					e.preventDefault();
+					var name = $("input#name"), nameval = name.val();
+
+					if (!nameval) {
+						alert("이름을 입력하시오........");
+						name.focus();
+					} else {
+						socket.emit("join", nameval);
+						name.val("");
+					}
+				}
+			});
+
+			$("button#inputMessage").on({
+				click : function(e) {
+					e.preventDefault();
+					var message = $("input#message"), messageVal = message.val();
+
+					if (!messageVal) {
+						alert("메세지를 입력하시오........");
+						message.focus();
+					} else {
+						socket.emit("inputMessage", messageVal);
+						$("div#message").append(messageVal + "<br/>");
+						message.val("");
+					}
+				}
+			});			
+		});
+	</script>
+	</body>
+</html>
